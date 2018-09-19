@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>03_人脸扫描、打点、连线动画</title>
+    <style>
+        .wrap {
+            /* transform: ; */
+            transform-origin: 0 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: scale(.16) translate(-50%, -50%);
+        }
+        .wrap, .svg-wrap, .img {
+            width: 2449px;
+            height: 3674px;
+        }
+        .svg-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+        .svg-wrap-2 {
+            position: absolute;
+            top: 630px;
+            left: 690px;
+            z-index: 6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <img src="../images/girl.jpg" alt="" class="img">
+        <div class="svg-wrap"></div>
+        <div class="svg-wrap-2">
+            <svg id = "faceElemrnts" xmlns = "http://www.w3.org/2000/svg" xmlns:xlink = "http://www.w3.org/1999/xlink" width = "1000" height = "1000">
+                <defs>
+                    <linearGradient id="myLinearGradient1" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+                        <stop offset="0%" stop-color="rgba(0, 200, 0, .01)" stop-opacity="0"/>
+                        <stop offset="95%" stop-color="rgba(0, 255, 0, .15)" stop-opacity="1"/>
+                        <stop offset="100%" stop-color="rgba(0, 255, 0, .5)" stop-opacity="1"/>
+                    </linearGradient>
+                    <clipPath id="clipPath">
+                        <circle cx="500" cy="1000" r="400" />
+                    </clipPath>
+                    <mask id="mask1" x="0" y="0" width="100%" height="100%" >
+                        <circle cx="50%" cy="50%" r="50%" style="stroke:none; fill: #fff" />
+                    </mask>
+                </defs>
+                <g mask="url(#mask1)">
+                    <rect x="0" y="0" width="1000" height="500" style="fill:url(#myLinearGradient1);stroke: none">
+                        <animateTransform attributeName="transform" type="translate" from="0 -600" to="0 800" begin="0s" dur="2.5s" repeatCount="1" fill="freeze"/>
+                        <animateTransform attributeName="transform" type="translate" from="0 -600" to="0 800" begin="2.8s" dur="3.4s" repeatCount="indefinite"/>
+                    </rect>
+                    <circle cx="500" cy="500" r="500" style="stroke: rgba(0, 255, 0, .5);stroke-width: 10;fill: none;" />
+                </g>
+            </svg>
+        </div>
+    </div>
+    <script>
+        // 人脸关键点坐标，以图片宽高的百分比表示
+        var faceLandmark = [
+            [0.363197, 0.284067], [0.362812, 0.296079], [0.363706, 0.308054], [0.3658, 0.319926], [0.368973, 0.331624], [0.372964, 0.343079], [0.377453, 0.354327], [0.382213, 0.36569], [0.387988, 0.377028], [0.395181, 0.387588], [0.404119, 0.397295], [0.414597, 0.406203], [0.426457, 0.414219], [0.439616, 0.421481], [0.453866, 0.427608], [0.470086, 0.431696], [0.487928, 0.433222], [0.506206, 0.431864], [0.523143, 0.42809], [0.53835, 0.422248], [0.552728, 0.415211], [0.56607, 0.407541], [0.577953, 0.399049], [0.58808, 0.38957], [0.596162, 0.379126], [0.601981, 0.36761], [0.606145, 0.355753], [0.609931, 0.344041], [0.613584, 0.332312], [0.616831, 0.320401], [0.619527, 0.308266], [0.621399, 0.296125], [0.622391, 0.283951], [0.380225, 0.262574], [0.395131, 0.251778], [0.416402, 0.251021], [0.437697, 0.253405], [0.45824, 0.258572], [0.454935, 0.267833], [0.435283, 0.265001], [0.415047, 0.262502], [0.39587, 0.261038], [0.521655, 0.258341], [0.542577, 0.253249], [0.564426, 0.250245], [0.586317, 0.25177], [0.600162, 0.264031], [0.584753, 0.259747], [0.565139, 0.260079], [0.544757, 0.263291], [0.52491, 0.266714], [0.405651, 0.289792], [0.416466, 0.284264], [0.431055, 0.282437], [0.44586, 0.284862], [0.457214, 0.291241], [0.443387, 0.29314], [0.429587, 0.294799], [0.416371, 0.293711], [0.431127, 0.287858], [0.430165, 0.288804], [0.524107, 0.289807], [0.535978, 0.283773], [0.550325, 0.281483], [0.564344, 0.283548], [0.574226, 0.289176], [0.563788, 0.293103], [0.550935, 0.294313], [0.537448, 0.292519], [0.549521, 0.287333], [0.550924, 0.288174], [0.487087, 0.282795], [0.486742, 0.298836], [0.486142, 0.31497], [0.485782, 0.331276], [0.469784, 0.287484], [0.465071, 0.32518], [0.456318, 0.339045], [0.465557, 0.346662], [0.472013, 0.342009], [0.48729, 0.34726], [0.502874, 0.341597], [0.509837, 0.346088], [0.519217, 0.338648], [0.509366, 0.324939], [0.506782, 0.287018], [0.447542, 0.380364], [0.453056, 0.367634], [0.471337, 0.359026], [0.48418, 0.360177], [0.497703, 0.35881], [0.519681, 0.366632], [0.533053, 0.37876], [0.522896, 0.388488], [0.507066, 0.395084], [0.486953, 0.397059], [0.468434, 0.395768], [0.454445, 0.389938], [0.461079, 0.378854], [0.467031, 0.374619], [0.485107, 0.371207], [0.508178, 0.374223], [0.518393, 0.378073], [0.508137, 0.378983], [0.486077, 0.379541], [0.468519, 0.379358], [0.474385, 0.372158], [0.496788, 0.371413], [0.477059, 0.379495], [0.497035, 0.379355], [0.448185, 0.373858], [0.46079, 0.362616], [0.509655, 0.362051], [0.527891, 0.372409], [0.419883, 0.288503], [0.443029, 0.287591], [0.537714, 0.287124], [0.560432, 0.287931]
+        ];
+        // 人脸点范围
+        var faceRectangle = { "height": 0.146235, "left": 0.380225, "top": 0.246235, "width": 0.219937 };
+
+        var svgStr = '', imgWid = 0, imgHei = 0;
+        var img = new Image();
+        img.onload = function () {
+            imgWid = img.width;
+            imgHei = img.height;
+            var r = faceRectangle.width * imgWid * 0.02;
+            var lineW = faceRectangle.width * imgWid * 0.008;
+
+            // 给人脸打点
+            var dotKey = [0, 4, 8, 12, 16, 20, 24, 28, 32, 33, 35, 37, 40, 38, 42, 44, 46, 48, 50, 55, 53, 51, 57, 61, 63, 65, 67, 71, 74, 80, 77, 83, 89, 86, 92, 95];
+            for (var i = 0; i < dotKey.length; i++) {
+                var item = faceLandmark[dotKey[i]];
+                var cx = item[0] * imgWid;
+                var cy = item[1] * imgHei;
+                var begin = 0.05 * i;
+                svgStr += `
+                    <circle id="dot-${i}" cx="${cx}" cy="${cy}" r="${r}" opacity="0">
+                        <animate attributeName="opacity" values="0;1;0;1;1;1;1" begin="${0.8 + begin}s" dur="1.5s" fill="freeze"></animate>
+                        <animate attributeName="opacity" values="1;0" begin="2.7s" dur="0.3s" fill="freeze"></animate>
+                    </circle>
+                `;
+            }
+
+            // 给人脸画线
+            var pathArr = [
+                {
+                    mode: 'sameTime',
+                    dotArr: [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], [32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16]],
+                    begin: 3,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[37, 36, 35, 34, 33, 41, 40, 39, 38, 37], [42, 43, 44, 45, 46, 47, 48, 49, 50, 42]],
+                    begin: 3.4,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[55, 54, 53, 52, 51, 58, 58, 57, 56, 55], [61, 62, 63, 64, 65, 66, 67, 68, 61]],
+                    begin: 3.8,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[75, 76, 77, 78, 79, 80], [85, 84, 83, 82, 81, 80]],
+                    begin: 4.2,
+                },
+                {
+                    dotArr: [86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 86],
+                    begin: 4.6,
+                },
+                {
+                    dotArr: [86, 98, 99, 100, 101, 102, 92],
+                    begin: 5,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[33, 51, 41, 75, 71, 38], [46, 65, 47, 85, 71, 50]],
+                    begin: 5.4,
+                    dur: .2,
+                },
+                {
+                    dotArr: [71, 74],
+                    begin: 5.6,
+                    dur: .2,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[74, 81, 84], [74, 79, 76]],
+                    begin: 5.8,
+                    dur: .2,
+                },
+                {
+                    mode: 'sameTime',
+                    dotArr: [[5, 51], [5, 86], [5, 15], [10, 51], [10, 77], [27, 65], [27, 92], [27, 17], [22, 83], [22, 65], [51, 77], [65, 83]],
+                    begin: 6,
+                    dur: .2,
+                }
+            ];
+            for (var i = 0; i < pathArr.length; i++) {
+                if (pathArr[i].mode === 'sameTime') {
+                    var dotArr = pathArr[i].dotArr;
+                    for (var j = 0; j < dotArr.length; j++) {
+                        svgStr = drawLine(faceLandmark, imgWid, imgHei, lineW, dotArr[j], svgStr, pathArr[i].begin, pathArr[i].dur);
+                    }
+                } else {
+                    svgStr = drawLine(faceLandmark, imgWid, imgHei, lineW, pathArr[i].dotArr, svgStr, pathArr[i].begin, pathArr[i].dur);
+                }
+            }
+
+            var svgEle = document.querySelector('.svg-wrap');
+            svgEle.innerHTML = `
+                <svg id="faceElemrnts" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="${imgWid}" height="${imgHei}">
+                    <g fill="#fff">
+                        ${svgStr}
+                    </g>
+                </svg>
+            `
+        };
+        img.src = '../images/girl.jpg';
+
+
+        // 绘制线条
+        function drawLine(faceLandmark, imgWid, imgHei, lineW, dotArr, svgStr, begin, dur) {
+            dur = dur || 0.4;
+            var path = '';
+            for (var i = 0; i < dotArr.length; i++) {
+                var item = faceLandmark[dotArr[i]];
+                var cx = item[0] * imgWid;
+                var cy = item[1] * imgHei;
+                if (i === 0) {
+                    path += `M ${cx} ${cy}`;
+                } else {
+                    path += `L ${cx} ${cy}`;
+                }
+            }
+            var pathEle = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathEle.setAttribute('d', path);
+            var len = pathEle.getTotalLength();
+            svgStr += `
+                <path id="path-1" d="${path}" stroke-dasharray="0 ${len}" stroke="#fff" stroke-width="${lineW}" fill="none">
+                    <animate attributeName="stroke-dasharray" from="0 ${len}" to="${len} ${len}" begin="${begin}s" dur="${dur}s" fill="freeze"></animate>
+                </path>
+            `;
+            return svgStr;
+        }
+
+
+
+    </script>
+</body>
+
+</html>

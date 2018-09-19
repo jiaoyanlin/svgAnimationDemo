@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>01_路径变形动画</title>
+    <style>
+        .wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <svg width="1000" height="800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+                <mask id="mask1" x="0" y="0" width="800" height="600" >
+                    <circle cx="400" cy="300" r="400" style="stroke:none; fill: #fff" />
+                </mask>
+            </defs>
+            <!-- 1、线条变形 -->
+            <g style="transform: scale(.5);">
+                <path fill="none" stroke="#f00" stroke-width="10">
+                    <animate dur="1s" repeatCount="indefinite" attributeName="d" attributeType="XML"
+                        values="m-0.25,96c71,-60 123,0 123,0;
+                        m1,97c68,57 123,0 123,0;
+                        m-0.25,96c71,-60 123,0 123,0;"
+                    >
+                    </animate>
+                </path>
+                <path fill="none" stroke="#0f0">
+                    <animate dur="2.5s" repeatCount="indefinite" attributeName="d" attributeType="XML"
+                        values="M0 200 C200 100 200 300 400 200 S600 300 800 200;
+                        M0 200 C200 300 200 100 400 200 S600 100 800 200;
+                        M0 200 C200 100 200 300 400 200 S600 300 800 200;"
+                    >
+                    </animate>
+                </path>
+            </g>
+            <!-- 2、水波动画：路径变形、遮罩、位移动画 -->
+            <g style="transform: translate(0, 250px) scale(.3);" mask="url(#mask1)">
+                <path fill="#84f5de" stroke="#84f5de">
+                    <animate dur="3s" repeatCount="indefinite" attributeName="d" attributeType="XML"
+                        values="M0 200 C200 100 200 300 400 200 S600 300 800 200 v800 h-800 Z;
+                        M0 200 C200 300 200 100 400 200 S600 100 800 200 v800 h-800 Z;
+                        M0 200 C200 100 200 300 400 200 S600 300 800 200 v800 h-800 Z;"
+                    >
+                    </animate>
+                    <animateTransform attributeName="transform" type="translate" from="0 600" to="0 -200" begin="0s" dur="3s" repeatCount="indefinite"/>
+                </path>
+                <circle cx="400" cy="300" r="400" style="stroke: #84f5de;fill: none;stroke-width: 10;" />
+            </g>
+        </svg>
+    </div>
+    <script>
+
+    </script>
+</body>
+
+</html>
