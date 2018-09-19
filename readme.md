@@ -11,16 +11,16 @@
 ## 2、效果预览
 
 #### 01
-![image](./preview/ani_01.gif)
+<img src="./preview/ani_01.gif" width = "400" height = "300" alt="01" />
 
 #### 02
-![image](./preview/ani_02.gif)
+<img src="./preview/ani_01.gif" width = "400" height = "300" alt="02" />
 
 #### 03
-![image](./preview/ani_03.gif)
+<img src="./preview/ani_01.gif" width = "300" height = "300" alt="03" />
 
 #### 04
-![image](./preview/ani_04.gif)
+<img src="./preview/ani_01.gif" width = "400" height = "300" alt="04" />
 
 #### 05
-![image](./preview/ani_05.gif)
+<img src="./preview/ani_01.gif" width = "300" height = "400" alt="05" />
